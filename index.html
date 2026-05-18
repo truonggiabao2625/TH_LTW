@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Tech Store</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+</head>
+
+<body class="bg-light">
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+
+        <div class="container">
+
+            <a class="navbar-brand fw-bold" href="#">
+                Tech Store
+            </a>
+
+            <button class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#menu">
+
+                <span class="navbar-toggler-icon"></span>
+
+            </button>
+
+            <div class="collapse navbar-collapse" id="menu">
+
+                <!-- Search -->
+                <form class="d-flex mx-auto"
+                      style="width: 500px;"
+                      role="search">
+
+                    <input class="form-control me-2"
+                            type="search"
+                            placeholder="Tìm sản phẩm">
+
+                    <button class="btn btn-outline-light">
+                        Tìm
+                    </button>
+
+                </form>
+
+                <!-- Menu -->
+                <ul class="navbar-nav ms-auto">
+
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">
+                            Trang chủ
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            Sản phẩm
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            Liên hệ
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="bi bi-cart"></i> Giỏ hàng
+                        </a>
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+    <!-- Banner -->
+    <div class="container my-3">
+
+        <div id="bannerCarousel"
+            class="carousel slide"
+            data-bs-ride="carousel">
+
+            <div class="carousel-inner rounded-4 overflow-hidden">
+
+                <div class="carousel-item active">
+
+                    <img src="https://cdnv2.tgdd.vn/mwg-static/tgdd/Banner/6b/84/6b841e0ebad403f30cd11e446ceee21a.png"
+                        class="d-block w-100">
+
+                </div>
+
+                <div class="carousel-item">
+
+                    <img src="https://cdnv2.tgdd.vn/mwg-static/tgdd/Banner/fc/60/fc60c2fb73f3b0e0d85c68f322a9e92d.png"
+                        class="d-block w-100">
+
+                </div>
+
+                <div class="carousel-item">
+
+                    <img src="https://cdnv2.tgdd.vn/mwg-static/tgdd/Banner/db/dc/dbdc2fd9580b2459abbe32c5ef95d383.png"
+                        class="d-block w-100">
+
+                </div>
+
+            </div>
+
+            <!-- Prev -->
+            <button class="carousel-control-prev"
+                type="button"
+                data-bs-target="#bannerCarousel"
+                data-bs-slide="prev">
+
+                <span class="carousel-control-prev-icon"></span>
+
+            </button>
+
+            <!-- Next -->
+            <button class="carousel-control-next"
+                type="button"
+                data-bs-target="#bannerCarousel"
+                data-bs-slide="next">
+
+                <span class="carousel-control-next-icon"></span>
+
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- Category -->
+    <div class="container-fluid border-top border-bottom bg-white">
+
+        <div class="container">
+
+            <div class="row text-center py-3">
+
+                <div class="col">
+                    <a href="#" class="text-dark text-decoration-none">
+                        <i class="bi bi-phone fs-4"></i>
+                        <div>Điện thoại</div>
+                    </a>
+                </div>
+
+                <div class="col">
+                    <a href="#" class="text-dark text-decoration-none">
+                        <i class="bi bi-laptop fs-4"></i>
+                        <div>Laptop</div>
+                    </a>
+                </div>
+
+                <div class="col">
+                    <a href="#" class="text-dark text-decoration-none">
+                        <i class="bi bi-headphones fs-4"></i>
+                        <div>Phụ kiện</div>
+                    </a>
+                </div>
+
+                <div class="col">
+                    <a href="#" class="text-dark text-decoration-none">
+                        <i class="bi bi-smartwatch fs-4"></i>
+                        <div>Smartwatch</div>
+                    </a>
+                </div>
+
+                <div class="col">
+                    <a href="#" class="text-dark text-decoration-none">
+                        <i class="bi bi-clock fs-4"></i>
+                        <div>Đồng hồ</div>
+                    </a>
+                </div>
+
+                <div class="col">
+                    <a href="#" class="text-dark text-decoration-none">
+                        <i class="bi bi-tablet fs-4"></i>
+                        <div>Tablet</div>
+                    </a>
+                </div>
+
+                <div class="col">
+                    <a href="#" class="text-dark text-decoration-none">
+                        <i class="bi bi-display fs-4"></i>
+                        <div>Màn hình</div>
+                    </a>
+                </div>
+
+                <div class="col">
+                    <a href="#" class="text-dark text-decoration-none">
+                        <i class="bi bi-printer fs-4"></i>
+                        <div>Máy in</div>
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Product -->
+    <section class="container my-5">
+
+        <div class="row">
+
+            <!-- Product List -->
+            <div class="col-md-9">
+
+                <h2 class="mb-4 fw-bold">
+                    Sản phẩm nổi bật
+                </h2>
+
+                <div class="row g-4">
+
+                    <!-- Product 1 -->
+                    <div class="col-md-4">
+
+                        <div class="card shadow h-100">
+
+                            <img src="https://cdn.tgdd.vn/Products/Images/44/363537/macbook-neo-13-inch-a18-pro-8gb-256gb-thumb-600x600.jpg"
+                                class="card-img-top img-fluid p-3"
+                                style="height:220px; object-fit:contain;">
+
+                            <div class="card-body">
+
+                                <h5 class="card-title">
+                                    Macbook Neo
+                                </h5>
+
+                                <p class="card-text">
+                                    Hiệu năng mạnh mẽ.
+                                </p>
+
+                                <p class="text-danger fw-bold">
+                                    25.000.000đ
+                                </p>
+
+                                <a href="product1.html"
+                                    class="btn btn-primary w-100">
+
+                                    Mua ngay
+
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Product 2 -->
+                    <div class="col-md-4">
+
+                        <div class="card shadow h-100">
+
+                            <img src="https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/MQD83"
+                                class="card-img-top img-fluid p-3"
+                                style="height:220px; object-fit:contain;">
+
+                            <div class="card-body">
+
+                                <h5 class="card-title">
+                                    Tai nghe Bluetooth
+                                </h5>
+
+                                <p class="card-text">
+                                    Âm thanh chất lượng cao.
+                                </p>
+
+                                <p class="text-danger fw-bold">
+                                    1.200.000đ
+                                </p>
+
+                                <a href="product2.html"
+                                    class="btn btn-primary w-100">
+
+                                    Mua ngay
+
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Product 3 -->
+                    <div class="col-md-4">
+
+                        <div class="card shadow h-100">
+
+                            <img src="https://cdnv2.tgdd.vn/mwg-static/tgdd/Products/Images/4547/359548/ban-phim-co-bluetooth-asus-rog-azoth-x-m704-thumb-638996686483236584-600x600.jpg"
+                                class="card-img-top img-fluid p-3"
+                                style="height:220px; object-fit:contain;">
+
+                            <div class="card-body">
+
+                                <h5 class="card-title">
+                                    Bàn phím cơ
+                                </h5>
+
+                                <p class="card-text">
+                                    Thiết kế đẹp.
+                                </p>
+
+                                <p class="text-danger fw-bold">
+                                    2.500.000đ
+                                </p>
+
+                                <a href="product3.html"
+                                    class="btn btn-primary w-100">
+
+                                    Mua ngay
+
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Product 4 -->
+                    <div class="col-md-4">
+
+                        <div class="card shadow h-100">
+
+                            <img src="https://cdnv2.tgdd.vn/mwg-static/tgdd/Products/Images/86/357693/chuot-sac-khong-day-gaming-razer-deathadder-v4-pro-white-edition-thumb-638962082972622106-600x600.jpg"
+                                class="card-img-top img-fluid p-3"
+                                style="height:220px; object-fit:contain;">
+
+                            <div class="card-body">
+
+                                <h5 class="card-title">
+                                    Chuột Gaming
+                                </h5>
+
+                                <p class="card-text">
+                                    Gaming chuyên nghiệp.
+                                </p>
+
+                                <p class="text-danger fw-bold">
+                                    850.000đ
+                                </p>
+
+                                <a href="product4.html"
+                                    class="btn btn-primary w-100">
+
+                                    Mua ngay
+
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Product 5 -->
+                    <div class="col-md-4">
+
+                        <div class="card shadow h-100">
+
+                            <img src="https://cdn.tgdd.vn/2026/05/timerseo/364953-600x600-1.jpg"
+                                class="card-img-top img-fluid p-3"
+                                style="height:220px; object-fit:contain;">
+
+                            <div class="card-body">
+
+                                <h5 class="card-title">
+                                    Màn hình 27 inch
+                                </h5>
+
+                                <p class="card-text">
+                                    Full HD sắc nét.
+                                </p>
+
+                                <p class="text-danger fw-bold">
+                                    5.900.000đ
+                                </p>
+
+                                <a href="product5.html"
+                                    class="btn btn-primary w-100">
+
+                                    Mua ngay
+
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Product 6 -->
+                    <div class="col-md-4">
+
+                        <div class="card shadow h-100">
+
+                            <img src="https://cdn.tgdd.vn/Products/Images/7077/344809/apple-watch-ultra-3-gps-cellular-49mm-vien-titanium-day-milan-den-tb-600x600.jpg"
+                                class="card-img-top img-fluid p-3"
+                                style="height:220px; object-fit:contain;">
+
+                            <div class="card-body">
+
+                                <h5 class="card-title">
+                                    Apple Watch
+                                </h5>
+
+                                <p class="card-text">
+                                    Đeo vào là ngầu.
+                                </p>
+
+                                <p class="text-danger fw-bold">
+                                    26.990.000đ
+                                </p>
+
+                                <a href="product6.html"
+                                    class="btn btn-primary w-100">
+
+                                    Mua ngay
+
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Sidebar -->
+            <div class="col-md-3">
+
+                <div class="card shadow-sm border-0 rounded-4">
+
+                    <div class="card-body">
+
+                        <h5 class="fw-bold mb-3">
+                            Kết nối với chúng tôi
+                        </h5>
+
+                        <hr>
+
+                        <a href="#"
+                            class="d-flex align-items-center text-dark text-decoration-none bg-light p-3 rounded mb-3">
+
+                            <i class="bi bi-facebook me-3 fs-5"></i>
+                            Facebook
+
+                        </a>
+
+                        <a href="#"
+                            class="d-flex align-items-center text-dark text-decoration-none bg-light p-3 rounded mb-3">
+
+                            <i class="bi bi-twitter-x me-3 fs-5"></i>
+                            Twitter
+
+                        </a>
+
+                        <a href="#"
+                            class="d-flex align-items-center text-dark text-decoration-none bg-light p-3 rounded mb-3">
+
+                            <i class="bi bi-instagram me-3 fs-5"></i>
+                            Instagram
+
+                        </a>
+
+                        <a href="#"
+                            class="d-flex align-items-center text-dark text-decoration-none bg-light p-3 rounded">
+
+                            <i class="bi bi-linkedin me-3 fs-5"></i>
+                            LinkedIn
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white text-center p-4">
+
+        <h5>Tech Store</h5>
+
+        <p>
+            Website bán đồ công nghệ sử dụng Bootstrap
+        </p>
+
+        <p class="mb-0">
+            © 2026 All Rights Reserved
+        </p>
+
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>
