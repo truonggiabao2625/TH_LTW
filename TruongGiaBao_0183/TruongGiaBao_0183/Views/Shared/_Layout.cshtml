@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Tech Store</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/TruongGiaBao_0183.styles.css" asp-append-version="true" />
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body class="bg-light">
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
+                <a class="navbar-brand fw-bold" asp-controller="Home" asp-action="Index">Tech Store</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainMenu" aria-controls="mainMenu" aria-expanded="false" aria-label="Mở menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="mainMenu">
+                    <form class="d-flex mx-lg-auto my-3 my-lg-0 site-search" role="search" asp-controller="Product" asp-action="Index" method="get">
+                        <input class="form-control me-2" type="search" name="search" placeholder="Tìm sản phẩm" aria-label="Tìm sản phẩm" />
+                        <button class="btn btn-outline-light" type="submit">Tìm</button>
+                    </form>
+
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="Index">Trang chủ</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Product" asp-action="Index">Sản phẩm</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#footer">Liên hệ</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="bi bi-cart"></i> Giỏ hàng
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container my-3">
+            <div id="bannerCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner rounded-4 overflow-hidden">
+                    <div class="carousel-item active">
+                        <img src="https://cdnv2.tgdd.vn/mwg-static/tgdd/Banner/6b/84/6b841e0ebad403f30cd11e446ceee21a.png" class="d-block w-100" alt="Khuyến mãi công nghệ" />
+                    </div>
+                    <div class="carousel-item">
+                        <img src="https://cdnv2.tgdd.vn/mwg-static/tgdd/Banner/fc/60/fc60c2fb73f3b0e0d85c68f322a9e92d.png" class="d-block w-100" alt="Ưu đãi laptop" />
+                    </div>
+                    <div class="carousel-item">
+                        <img src="https://cdnv2.tgdd.vn/mwg-static/tgdd/Banner/db/dc/dbdc2fd9580b2459abbe32c5ef95d383.png" class="d-block w-100" alt="Phụ kiện công nghệ" />
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#bannerCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Trước</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#bannerCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Sau</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="container-fluid border-top border-bottom bg-white">
+            <div class="container">
+                <div class="row row-cols-2 row-cols-md-4 row-cols-lg-8 text-center py-3 g-3">
+                    <div class="col"><a href="#" class="category-link"><i class="bi bi-phone fs-4"></i><span>Điện thoại</span></a></div>
+                    <div class="col"><a href="#" class="category-link"><i class="bi bi-laptop fs-4"></i><span>Laptop</span></a></div>
+                    <div class="col"><a href="#" class="category-link"><i class="bi bi-headphones fs-4"></i><span>Phụ kiện</span></a></div>
+                    <div class="col"><a href="#" class="category-link"><i class="bi bi-smartwatch fs-4"></i><span>Smartwatch</span></a></div>
+                    <div class="col"><a href="#" class="category-link"><i class="bi bi-clock fs-4"></i><span>Đồng hồ</span></a></div>
+                    <div class="col"><a href="#" class="category-link"><i class="bi bi-tablet fs-4"></i><span>Tablet</span></a></div>
+                    <div class="col"><a href="#" class="category-link"><i class="bi bi-display fs-4"></i><span>Màn hình</span></a></div>
+                    <div class="col"><a href="#" class="category-link"><i class="bi bi-printer fs-4"></i><span>Máy in</span></a></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main role="main">
+        @RenderBody()
+    </main>
+
+    <footer id="footer" class="bg-dark text-white text-center p-4 mt-5">
+        <h5>Tech Store</h5>
+        <p>Website bán đồ công nghệ sử dụng Bootstrap</p>
+        <p class="mb-0">&copy; 2026 All Rights Reserved</p>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

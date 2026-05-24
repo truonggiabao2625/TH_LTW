@@ -1,0 +1,154 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  min-height: 100vh;
+}
+
+.site-search {
+  width: min(100%, 500px);
+}
+
+.category-link {
+  color: #212529;
+  display: grid;
+  gap: 4px;
+  text-decoration: none;
+}
+
+.category-link:hover {
+  color: #0d6efd;
+}
+
+.product-card {
+  border: 0;
+  overflow: hidden;
+}
+
+.product-image-wrap {
+  align-items: center;
+  background: #fff;
+  display: flex;
+  height: 220px;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.product-image-wrap img,
+.table-product-image {
+  height: 100%;
+  object-fit: contain;
+  width: 100%;
+}
+
+.product-image-placeholder {
+  align-items: center;
+  background: #f1f3f5;
+  color: #6c757d;
+  display: flex;
+  font-size: 3rem;
+  height: 100%;
+  justify-content: center;
+  width: 100%;
+}
+
+.social-link {
+  align-items: center;
+  background: #f8f9fa;
+  border-radius: 8px;
+  color: #212529;
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+  padding: 12px 14px;
+  text-decoration: none;
+}
+
+.social-link:hover {
+  background: #e9ecef;
+  color: #0d6efd;
+}
+
+.table-product-image {
+  height: 72px;
+  max-width: 96px;
+}
+
+.product-description-cell {
+  max-width: 320px;
+}
+
+.empty-state {
+  background: #fff;
+  border-radius: 8px;
+  padding: 3rem 1.5rem;
+  text-align: center;
+}
+
+.empty-state i {
+  color: #6c757d;
+  font-size: 3rem;
+}
+
+.product-form-card {
+  border-radius: 8px;
+}
+
+.upload-panel {
+  align-items: center;
+  background: #f8f9fa;
+  border: 1px dashed #adb5bd;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+}
+
+.upload-icon {
+  align-items: center;
+  background: #e7f1ff;
+  border-radius: 50%;
+  color: #0d6efd;
+  display: flex;
+  font-size: 2.5rem;
+  height: 84px;
+  justify-content: center;
+  margin-bottom: 1rem;
+  width: 84px;
+}
+
+.upload-note {
+  align-items: flex-start;
+  background: #fff;
+  border-radius: 8px;
+  color: #495057;
+  display: flex;
+  gap: 10px;
+  padding: 12px;
+  text-align: left;
+}
+
+@media (max-width: 991.98px) {
+  #bannerCarousel img {
+    min-height: 120px;
+    object-fit: cover;
+  }
+}

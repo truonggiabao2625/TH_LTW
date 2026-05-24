@@ -1,0 +1,106 @@
+@model IEnumerable<TruongGiaBao_0183.Models.Product>
+
+@{
+    ViewData["Title"] = "Quản lý sản phẩm";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap5.css" />
+}
+
+<section class="container my-5">
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+        <div>
+            <h1 class="fw-bold mb-1">Quản lý sản phẩm</h1>
+            <p class="text-muted mb-0">Tìm kiếm, phân trang, sắp xếp và thao tác dữ liệu sản phẩm.</p>
+        </div>
+        <a asp-action="Add" class="btn btn-success">
+            <i class="bi bi-plus-circle"></i> Thêm sản phẩm
+        </a>
+    </div>
+
+    <div class="table-responsive bg-white p-3 rounded-3 shadow-sm">
+        <table id="productsTable" class="table table-striped table-hover align-middle w-100">
+            <thead class="table-dark">
+                <tr>
+                    <th>Mã sản phẩm</th>
+                    <th>Hình ảnh</th>
+                    <th>Tên sản phẩm</th>
+                    <th>Giá</th>
+                    <th>Mô tả</th>
+                    <th>Chức năng</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Id</td>
+                        <td>
+                            @if (!string.IsNullOrWhiteSpace(item.ImageUrl))
+                            {
+                                <img src="@item.ImageUrl" alt="@item.Name" class="table-product-image" />
+                            }
+                            else
+                            {
+                                <span class="badge text-bg-secondary">Chưa có ảnh</span>
+                            }
+                        </td>
+                        <td class="fw-semibold">@item.Name</td>
+                        <td data-order="@item.Price">@item.Price.ToString("N0") đ</td>
+                        <td class="product-description-cell">@item.Description</td>
+                        <td>
+                            <div class="btn-group btn-group-sm" role="group" aria-label="Chức năng sản phẩm">
+                                <a asp-action="Display" asp-route-id="@item.Id" class="btn btn-outline-info" title="Xem chi tiết">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <a asp-action="Update" asp-route-id="@item.Id" class="btn btn-outline-primary" title="Sửa">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger" title="Xóa">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</section>
+
+@section Scripts {
+    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap5.js"></script>
+    <script>
+        $(function () {
+            const table = $('#productsTable').DataTable({
+                pageLength: 5,
+                order: [[0, 'asc']],
+                language: {
+                    search: 'Tìm kiếm:',
+                    lengthMenu: 'Hiển thị _MENU_ dòng',
+                    info: 'Hiển thị _START_ đến _END_ trong _TOTAL_ sản phẩm',
+                    infoEmpty: 'Không có sản phẩm',
+                    infoFiltered: '(lọc từ _MAX_ sản phẩm)',
+                    zeroRecords: 'Không tìm thấy sản phẩm phù hợp',
+                    emptyTable: 'Chưa có dữ liệu sản phẩm',
+                    paginate: {
+                        first: 'Đầu',
+                        previous: 'Trước',
+                        next: 'Sau',
+                        last: 'Cuối'
+                    }
+                },
+                columnDefs: [
+                    { orderable: false, targets: [1, 5] }
+                ]
+            });
+
+            const searchValue = new URLSearchParams(window.location.search).get('search');
+            if (searchValue) {
+                table.search(searchValue).draw();
+            }
+        });
+    </script>
+}
