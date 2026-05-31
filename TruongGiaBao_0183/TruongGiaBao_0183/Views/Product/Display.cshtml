@@ -1,21 +1,208 @@
-﻿@model TruongGiaBao_0183.Models.Product
+@model TruongGiaBao_0183.Models.Product
 
-<h2>Product Details</h2>
+@{
+    ViewData["Title"] = Model.Name;
+}
 
-<div>
-    <h4>Name: @Model.Name</h4>
-    <h4>Price: @Model.Price</h4>
-    <h4>Description: @Model.Description</h4>
+<section class="container my-5">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb bg-white p-3 rounded shadow-sm">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" class="text-decoration-none"><i class="bi bi-house-door-fill"></i> Trang chủ</a></li>
+            <li class="breadcrumb-item"><a asp-controller="Product" asp-action="Index" class="text-decoration-none">Sản phẩm</a></li>
+            <li class="breadcrumb-item active" aria-current="page">@Model.Name</li>
+        </ol>
+    </nav>
 
-    <img src="@Model.ImageUrl" alt="Product Image" style="width: 300px; height: auto;" />
+    <div class="row g-5">
+        <!-- Cột trái: Gallery Ảnh -->
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm rounded-4 p-3 bg-white">
+                <!-- Ảnh hiển thị chính -->
+                <div class="main-image-container border rounded-4 d-flex align-items-center justify-content-center bg-light overflow-hidden" style="height: 420px; transition: all 0.3s ease;">
+                    @if (!string.IsNullOrWhiteSpace(Model.ImageUrl))
+                    {
+                        <img id="mainProductImage" src="@Model.ImageUrl" class="img-fluid" style="max-height: 100%; object-fit: contain; transform: scale(0.95); transition: transform 0.3s ease;" alt="@Model.Name" />
+                    }
+                    else
+                    {
+                        <div class="text-center text-muted">
+                            <i class="bi bi-image" style="font-size: 5rem;"></i>
+                            <p class="mt-2">Không có hình ảnh</p>
+                        </div>
+                    }
+                </div>
 
-    @if (Model.ImageUrls != null)
-    {
-        foreach (var imageUrl in Model.ImageUrls)
-        {
-            <img src="@imageUrl" alt="Product Image" style="width: 300px; height: auto;" />
+                <!-- Các ảnh phụ (Thumbnails) -->
+                @if (Model.ProductImages != null && Model.ProductImages.Any())
+                {
+                    <div class="row g-2 mt-3 justify-content-center">
+                        <!-- Thumbnail ảnh chính -->
+                        <div class="col-3 col-md-2">
+                            <div class="thumbnail-item border border-primary border-2 rounded-3 p-1 bg-white cursor-pointer active" onclick="changeMainImage('@Model.ImageUrl', this)" style="height: 64px; display: flex; align-items: center; justify-content: center; overflow: hidden; cursor: pointer;">
+                                <img src="@Model.ImageUrl" class="img-fluid" style="max-height: 100%; object-fit: contain;" alt="thumb-main" />
+                            </div>
+                        </div>
+                        
+                        <!-- Thumbnail các ảnh phụ -->
+                        @{
+                            int idx = 1;
+                        }
+                        @foreach (var img in Model.ProductImages)
+                        {
+                            <div class="col-3 col-md-2">
+                                <div class="thumbnail-item border rounded-3 p-1 bg-white cursor-pointer" onclick="changeMainImage('@img.Url', this)" style="height: 64px; display: flex; align-items: center; justify-content: center; overflow: hidden; cursor: pointer;">
+                                    <img src="@img.Url" class="img-fluid" style="max-height: 100%; object-fit: contain;" alt="thumb-@idx" />
+                                </div>
+                            </div>
+                            idx++;
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- Cột phải: Thông tin & Đặt hàng -->
+        <div class="col-lg-6">
+            <div class="d-flex flex-column h-100">
+                <div>
+                    <!-- Danh mục badge -->
+                    @if (Model.Category != null)
+                    {
+                        <span class="badge bg-primary px-3 py-2 fs-6 rounded-pill mb-2">@Model.Category.Name</span>
+                    }
+                    
+                    <!-- Tên sản phẩm -->
+                    <h1 class="fw-bold text-dark mb-2 display-6">@Model.Name</h1>
+                    
+                    <!-- Đánh giá và mã sản phẩm -->
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="text-warning">
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <span class="text-muted small ms-1">(5.0 - 120 đánh giá)</span>
+                        </div>
+                        <div class="vr text-muted"></div>
+                        <div class="small text-muted">Mã SP: <span class="fw-semibold">#@Model.Id</span></div>
+                    </div>
+
+                    <!-- Giá tiền -->
+                    <div class="bg-light p-3 rounded-3 mb-4 d-flex align-items-baseline gap-3">
+                        <span class="text-danger fw-extrabold fs-2 display-6 fw-bold">@Model.Price.ToString("N0") đ</span>
+                        <span class="text-muted text-decoration-line-through small">@((Model.Price * 1.15m).ToString("N0")) đ</span>
+                        <span class="badge bg-danger rounded-pill">-15%</span>
+                    </div>
+
+                    <!-- Cam kết cửa hàng -->
+                    <div class="row row-cols-1 row-cols-sm-3 g-3 mb-4">
+                        <div class="col">
+                            <div class="d-flex align-items-center gap-2 text-success small">
+                                <i class="bi bi-truck fs-4"></i>
+                                <div>Giao hàng miễn phí</div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="d-flex align-items-center gap-2 text-success small">
+                                <i class="bi bi-shield-check fs-4"></i>
+                                <div>Chính hãng 100%</div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="d-flex align-items-center gap-2 text-success small">
+                                <i class="bi bi-arrow-left-right fs-4"></i>
+                                <div>Đổi trả 7 ngày</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chọn số lượng -->
+                    <div class="mb-4">
+                        <label class="form-label fw-bold text-dark mb-2">Số lượng:</label>
+                        <div class="input-group" style="width: 140px;">
+                            <button class="btn btn-outline-secondary px-3" type="button" onclick="decreaseQty()">-</button>
+                            <input type="text" id="quantityInput" class="form-control text-center fw-bold bg-white" value="1" readonly />
+                            <button class="btn btn-outline-secondary px-3" type="button" onclick="increaseQty()">+</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Nút Hành Động -->
+                <div class="d-flex flex-wrap gap-3 mt-2 mb-4">
+                    <button type="button" class="btn btn-success btn-lg px-4 flex-grow-1" onclick="addToCart('@Model.Name')">
+                        <i class="bi bi-cart-plus-fill me-2"></i> Thêm vào giỏ hàng
+                    </button>
+                    <button type="button" class="btn btn-primary btn-lg px-4 flex-grow-1" onclick="buyNow('@Model.Name')">
+                        Mua ngay
+                    </button>
+                </div>
+
+                <!-- Nút quay lại -->
+                <div>
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left-short"></i> Quay lại trang chủ
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Khối mô tả chi tiết -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm rounded-4 p-4 p-lg-5 bg-white">
+                <h3 class="fw-bold mb-4 text-dark border-bottom pb-3"><i class="bi bi-file-text me-2"></i>Mô tả chi tiết sản phẩm</h3>
+                <div class="lh-lg text-secondary" style="white-space: pre-line;">
+                    @Model.Description
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        function changeMainImage(src, element) {
+            const mainImg = document.getElementById('mainProductImage');
+            if (mainImg) {
+                // Fade effect
+                mainImg.style.opacity = 0;
+                setTimeout(() => {
+                    mainImg.src = src;
+                    mainImg.style.opacity = 1;
+                }, 150);
+            }
+            
+            // Remove active classes
+            document.querySelectorAll('.thumbnail-item').forEach(el => {
+                el.classList.remove('active', 'border-primary', 'border-2');
+            });
+            
+            // Add active to current
+            element.classList.add('active', 'border-primary', 'border-2');
         }
-    }
-</div>
 
-<a asp-action="Index">Back to List</a>
+        function decreaseQty() {
+            const input = document.getElementById('quantityInput');
+            let val = parseInt(input.value);
+            if (val > 1) {
+                input.value = val - 1;
+            }
+        }
+
+        function increaseQty() {
+            const input = document.getElementById('quantityInput');
+            let val = parseInt(input.value);
+            input.value = val + 1;
+        }
+
+        function buyNow(name) {
+            addToCart(name);
+            setTimeout(() => {
+                alert(`Đang tiến hành đặt hàng cho sản phẩm: ${name}. Cảm ơn quý khách!`);
+            }, 500);
+        }
+    </script>
+}

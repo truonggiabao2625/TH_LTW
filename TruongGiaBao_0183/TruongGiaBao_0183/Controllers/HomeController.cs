@@ -1,6 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
-using TruongGiaBao_0183.Models;
 using TruongGiaBao_0183.Repositories;
 
 namespace TruongGiaBao_0183.Controllers
@@ -9,28 +7,40 @@ namespace TruongGiaBao_0183.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IProductRepository _productRepository;
+        private readonly ICategoryRepository _categoryRepository;
 
-        public HomeController(ILogger<HomeController> logger, IProductRepository productRepository)
+        public HomeController(
+            ILogger<HomeController> logger,
+            IProductRepository productRepository,
+            ICategoryRepository categoryRepository)
         {
             _logger = logger;
             _productRepository = productRepository;
+            _categoryRepository = categoryRepository;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index(int? categoryId)
         {
-            var products = _productRepository.GetAll();
+            var products = await _productRepository.GetAllAsync();
+            var categories = await _categoryRepository.GetAllAsync();
+            
+            ViewBag.Categories = categories;
+
+            if (categoryId.HasValue)
+            {
+                products = products.Where(p => p.CategoryId == categoryId.Value);
+                ViewBag.SelectedCategoryId = categoryId.Value;
+                
+                var selectedCat = categories.FirstOrDefault(c => c.Id == categoryId.Value);
+                ViewBag.SelectedCategoryName = selectedCat?.Name;
+            }
+
             return View(products);
         }
 
         public IActionResult Privacy()
         {
             return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }

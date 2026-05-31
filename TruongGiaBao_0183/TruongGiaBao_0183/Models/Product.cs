@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TruongGiaBao_0183.Models
 {
@@ -16,8 +17,21 @@ namespace TruongGiaBao_0183.Models
 
         public int CategoryId { get; set; }
 
-        public string ImageUrl { get; set; } // Đường dẫn đến hình ảnh đại diện
+        public Category Category { get; set; }
 
-        public List<string> ImageUrls { get; set; } // Danh sách các hình ảnh khác
+        public string ImageUrl { get; set; }
+
+        [NotMapped]
+        public List<string> ImageUrls { get; set; }
+
+        public List<ProductImage> ProductImages { get; set; } = new List<ProductImage>();
+    }
+
+    public class ProductImage
+    {
+        public int Id { get; set; }
+        public string Url { get; set; }
+        public int ProductId { get; set; }
+        public Product Product { get; set; }
     }
 }
