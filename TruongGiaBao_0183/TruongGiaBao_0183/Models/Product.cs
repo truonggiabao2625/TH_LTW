@@ -11,6 +11,7 @@ namespace TruongGiaBao_0183.Models
         public string Name { get; set; }
 
         [Range(0.01, 1000000000)]
+        [Column(TypeName = "decimal(18,2)")]
         public decimal Price { get; set; }
 
         public string Description { get; set; }
