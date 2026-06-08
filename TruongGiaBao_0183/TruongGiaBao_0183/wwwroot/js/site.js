@@ -1,14 +1,28 @@
 // Cart functionality
 let cartCount = 0;
 
-function addToCart(productName) {
-    cartCount++;
-    const badge = document.getElementById('cartBadge');
-    if (badge) {
-        badge.innerText = cartCount;
-        badge.style.display = 'inline-block';
-    }
-    showToast(`Đã thêm <b>${productName}</b> vào giỏ hàng thành công!`);
+function addToCart(productId, productName, quantity = 1) {
+    $.ajax({
+        url: '/Cart/AddToCart',
+        type: 'POST',
+        data: { id: productId, quantity: quantity },
+        headers: {
+            "X-Requested-With": "XMLHttpRequest"
+        },
+        success: function (response) {
+            if (response.success) {
+                const badge = document.getElementById('cartBadge');
+                if (badge) {
+                    badge.innerText = response.cartCount;
+                    badge.style.display = 'inline-block';
+                }
+                showToast(`Đã thêm <b>${productName}</b> vào giỏ hàng thành công!`);
+            }
+        },
+        error: function () {
+            alert('Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng.');
+        }
+    });
 }
 
 function showToast(message) {

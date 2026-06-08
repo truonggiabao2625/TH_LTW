@@ -1,0 +1,136 @@
+@model IEnumerable<TruongGiaBao_0183.Models.Order>
+
+@{
+    ViewData["Title"] = "Quản lý Đơn hàng - Hệ thống Admin";
+}
+
+@section Styles {
+    <!-- CSS của DataTables hỗ trợ Bootstrap 5 -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap5.css" />
+}
+
+<!-- Card bọc ngoài danh sách đơn hàng -->
+<div class="card border-0 shadow-sm rounded-3">
+    <div class="card-header bg-white border-0 py-3">
+        <h4 class="mb-0 fw-bold text-dark">
+            <i class="bi bi-cart-check-fill text-primary"></i> Quản lý Đơn hàng
+        </h4>
+    </div>
+    
+    <!-- Hiển thị thông báo thành công nếu có -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show mx-4 mt-3 rounded-3" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i> @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="card-body p-4">
+        <div class="table-responsive">
+            <table id="ordersTable" class="table table-hover align-middle mb-0">
+                <thead class="table-light text-secondary small text-uppercase">
+                    <tr>
+                        <th class="ps-4" style="width: 130px;">Mã Đơn hàng</th>
+                        <th>Khách hàng</th>
+                        <th>Ngày đặt hàng</th>
+                        <th>Tổng tiền</th>
+                        <th>Trạng thái</th>
+                        <th class="text-center" style="width: 200px;">Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="ps-4 fw-semibold text-secondary">#@item.Id</td>
+                                <td>
+                                    <div class="fw-bold text-dark">@item.LastName @item.FirstName</div>
+                                    <small class="text-muted"><i class="bi bi-telephone"></i> @item.PhoneNumber</small>
+                                </td>
+                                <td class="text-secondary">@item.OrderDate.ToString("dd/MM/yyyy HH:mm")</td>
+                                <td class="fw-semibold text-primary">@item.TotalPrice.ToString("N0") đ</td>
+                                <td>
+                                    @* Hiển thị Badge màu sắc tương ứng trạng thái *@
+                                    @if (item.Status == "Pending")
+                                    {
+                                        <span class="badge bg-warning text-dark text-uppercase">Chờ xử lý</span>
+                                    }
+                                    else if (item.Status == "Processing")
+                                    {
+                                        <span class="badge bg-info text-white text-uppercase">Đang xử lý</span>
+                                    }
+                                    else if (item.Status == "Shipped")
+                                    {
+                                        <span class="badge bg-primary text-white text-uppercase">Đang giao</span>
+                                    }
+                                    else if (item.Status == "Completed")
+                                    {
+                                        <span class="badge bg-success text-white text-uppercase">Đã hoàn tất</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger text-white text-uppercase">Đã hủy</span>
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <!-- Chi tiết đơn hàng -->
+                                        <a asp-area="Admin" asp-controller="Order" asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary d-flex align-items-center gap-1">
+                                            <i class="bi bi-eye"></i> Chi tiết
+                                        </a>
+                                        
+                                        <!-- Xóa đơn hàng -->
+                                        <form asp-action="Delete" method="post" class="m-0" onsubmit="return confirm('Bạn có chắc chắn muốn xóa đơn hàng này khỏi hệ thống?')">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@item.Id" />
+                                            <button type="submit" class="btn btn-sm btn-outline-danger d-flex align-items-center gap-1">
+                                                <i class="bi bi-trash"></i> Xóa
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- Thư viện JS của DataTables hỗ trợ Bootstrap 5 -->
+    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap5.js"></script>
+    <script>
+        $(function () {
+            // Khởi tạo DataTable cho bảng đơn hàng
+            $('#ordersTable').DataTable({
+                pageLength: 5, // Hiển thị tối đa 5 đơn hàng mỗi trang
+                order: [[2, 'desc']], // Sắp xếp mặc định theo ngày đặt mới nhất (index 2)
+                language: {
+                    search: 'Tìm kiếm:',
+                    lengthMenu: 'Hiển thị _MENU_ dòng',
+                    info: 'Hiển thị _START_ đến _END_ trong _TOTAL_ đơn hàng',
+                    infoEmpty: 'Không có đơn hàng',
+                    infoFiltered: '(lọc từ _MAX_ đơn hàng)',
+                    zeroRecords: 'Không tìm thấy đơn hàng phù hợp',
+                    emptyTable: 'Chưa có dữ liệu đơn hàng',
+                    paginate: {
+                        first: 'Đầu',
+                        previous: 'Trước',
+                        next: 'Sau',
+                        last: 'Cuối'
+                    }
+                },
+                columnDefs: [
+                    // Không cho phép sắp xếp ở cột Thao tác (index 5)
+                    { orderable: false, targets: [5] }
+                ]
+            });
+        });
+    </script>
+}

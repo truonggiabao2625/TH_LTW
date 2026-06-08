@@ -1,0 +1,91 @@
+@model IEnumerable<TruongGiaBao_0183.Models.Category>
+
+@{
+    ViewData["Title"] = "Quản lý Danh mục - Hệ thống Admin";
+}
+
+@section Styles {
+    <!-- CSS của DataTables hỗ trợ Bootstrap 5 -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap5.css" />
+}
+
+<!-- Card bọc ngoài danh sách danh mục -->
+<div class="card border-0 shadow-sm rounded-3">
+    <div class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center">
+        <h4 class="mb-0 fw-bold text-dark">
+            <i class="bi bi-tags-fill text-primary"></i> Quản lý Danh mục sản phẩm
+        </h4>
+        <a asp-area="Admin" asp-controller="Category" asp-action="Create" class="btn btn-primary px-3 py-2 fw-semibold d-flex align-items-center gap-2">
+            <i class="bi bi-plus-circle-fill"></i> Thêm Danh mục Mới
+        </a>
+    </div>
+    <div class="card-body p-4">
+        <div class="table-responsive">
+            <table id="categoriesTable" class="table table-hover align-middle mb-0">
+                <thead class="table-light text-secondary small text-uppercase">
+                    <tr>
+                        <th class="ps-4" style="width: 120px;">Mã Danh mục</th>
+                        <th>Tên Danh mục</th>
+                        <th class="text-center" style="width: 200px;">Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="ps-4 fw-semibold text-secondary">#@item.Id</td>
+                                <td class="fw-bold text-dark">@item.Name</td>
+                                <td class="text-center">
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <a asp-area="Admin" asp-controller="Category" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-warning d-flex align-items-center gap-1">
+                                            <i class="bi bi-pencil-square"></i> Sửa
+                                        </a>
+                                        <a asp-area="Admin" asp-controller="Category" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger d-flex align-items-center gap-1">
+                                            <i class="bi bi-trash"></i> Xóa
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- Thư viện JS của DataTables hỗ trợ Bootstrap 5 -->
+    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap5.js"></script>
+    <script>
+        $(function () {
+            // Khởi tạo DataTable cho bảng danh mục
+            $('#categoriesTable').DataTable({
+                pageLength: 5, // Hiển thị tối đa 5 danh mục mỗi trang
+                order: [[0, 'asc']], // Sắp xếp theo ID tăng dần
+                language: {
+                    search: 'Tìm kiếm:',
+                    lengthMenu: 'Hiển thị _MENU_ dòng',
+                    info: 'Hiển thị _START_ đến _END_ trong _TOTAL_ danh mục',
+                    infoEmpty: 'Không có danh mục',
+                    infoFiltered: '(lọc từ _MAX_ danh mục)',
+                    zeroRecords: 'Không tìm thấy kết quả phù hợp',
+                    emptyTable: 'Chưa có dữ liệu danh mục',
+                    paginate: {
+                        first: 'Đầu',
+                        previous: 'Trước',
+                        next: 'Sau',
+                        last: 'Cuối'
+                    }
+                },
+                columnDefs: [
+                    // Không cho phép sắp xếp ở cột Thao tác (index 2)
+                    { orderable: false, targets: [2] }
+                ]
+            });
+        });
+    </script>
+}

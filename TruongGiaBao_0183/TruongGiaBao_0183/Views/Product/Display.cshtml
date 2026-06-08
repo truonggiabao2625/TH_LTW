@@ -109,10 +109,10 @@
                     </div>
 
                     <div class="details-actions d-flex gap-3 w-100">
-                        <button type="button" class="details-action-primary flex-fill" onclick="buyNow('@Model.Name')">
+                        <button type="button" class="details-action-primary flex-fill" onclick="buyNow(@Model.Id, '@Model.Name')">
                             Mua ngay
                         </button>
-                        <button type="button" class="details-action-secondary flex-fill" onclick="addToCart('@Model.Name')">
+                        <button type="button" class="details-action-secondary flex-fill" onclick="addToCart(@Model.Id, '@Model.Name', parseInt(document.getElementById('quantityInput').value || '1'))">
                             <i class="bi bi-cart-plus"></i> Thêm vào giỏ
                         </button>
                     </div>
@@ -545,11 +545,19 @@
             input.value = val + 1;
         }
 
-        function buyNow(name) {
-            addToCart(name);
-            setTimeout(() => {
-                alert(`Đang tiến hành đặt hàng cho sản phẩm: ${name}. Cảm ơn quý khách!`);
-            }, 500);
+        function buyNow(id, name) {
+            var qty = parseInt(document.getElementById('quantityInput').value || '1');
+            $.ajax({
+                url: '/Cart/AddToCart',
+                type: 'POST',
+                data: { id: id, quantity: qty },
+                success: function () {
+                    window.location.href = '/Cart';
+                },
+                error: function () {
+                    alert('Có lỗi xảy ra khi thực hiện mua hàng.');
+                }
+            });
         }
     </script>
 }

@@ -89,7 +89,7 @@
                                         <a asp-controller="Product" asp-action="Display" asp-route-id="@product.Id" class="btn product-action-secondary flex-grow-1">
                                             <i class="bi bi-eye"></i> Chi tiết
                                         </a>
-                                        <button type="button" class="btn product-action-primary flex-grow-1" onclick="addToCart('@product.Name')">
+                                        <button type="button" class="btn product-action-primary flex-grow-1" onclick="addToCart(@product.Id, '@product.Name')">
                                             <i class="bi bi-cart-plus"></i> Mua ngay
                                         </button>
                                     </div>

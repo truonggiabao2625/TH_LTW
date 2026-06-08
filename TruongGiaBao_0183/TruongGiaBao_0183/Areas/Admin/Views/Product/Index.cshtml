@@ -1,0 +1,130 @@
+@model IEnumerable<TruongGiaBao_0183.Models.Product>
+
+@{
+    ViewData["Title"] = "Quản lý Sản phẩm - Hệ thống Admin";
+}
+
+@section Styles {
+    <!-- CSS của DataTables hỗ trợ Bootstrap 5 -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap5.css" />
+}
+
+<!-- Card bọc ngoài bảng quản lý -->
+<div class="card border-0 shadow-sm rounded-3">
+    <div class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center">
+        <h4 class="mb-0 fw-bold text-dark">
+            <i class="bi bi-box-seam-fill text-primary"></i> Danh Sách Sản Phẩm
+        </h4>
+        <!-- Nút Thêm mới sản phẩm điều hướng đến ProductController của Area mặc định hoặc Area Admin tùy cấu hình -->
+        <!-- Ở đây, liên kết tạm thời trỏ về chức năng Add của Product ngoài trang chủ hoặc Admin -->
+        <a asp-area="" asp-controller="Product" asp-action="Add" class="btn btn-primary px-3 py-2 fw-semibold d-flex align-items-center gap-2">
+            <i class="bi bi-plus-circle-fill"></i> Thêm Sản Phẩm Mới
+        </a>
+    </div>
+    <!-- Thêm padding p-4 để chừa không gian hiển thị cho thanh tìm kiếm và phân trang của DataTable -->
+    <div class="card-body p-4">
+        <div class="table-responsive">
+            <!-- Gắn ID cho bảng để kích hoạt DataTable -->
+            <table id="productsTable" class="table table-hover align-middle mb-0">
+                <thead class="table-light text-secondary small text-uppercase">
+                    <tr>
+                        <th class="ps-4" style="width: 80px;">Hình ảnh</th>
+                        <th>Tên sản phẩm</th>
+                        <th>Giá bán</th>
+                        <th>Mô tả</th>
+                        <th class="text-center" style="width: 200px;">Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="ps-4">
+                                    @if (!string.IsNullOrEmpty(item.ImageUrl))
+                                    {
+                                        <img src="@item.ImageUrl" alt="@item.Name" class="rounded border" style="width: 60px; height: 60px; object-fit: cover;" />
+                                    }
+                                    else
+                                    {
+                                        <div class="bg-light rounded border d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                            <i class="bi bi-image text-muted fs-4"></i>
+                                        </div>
+                                    }
+                                </td>
+                                <td>
+                                    <div class="fw-bold text-dark">@item.Name</div>
+                                    <span class="badge bg-secondary-subtle text-secondary small">ID: @item.Id</span>
+                                </td>
+                                <td class="fw-semibold text-danger">
+                                    @item.Price.ToString("N0") <span class="small">đ</span>
+                                </td>
+                                <td>
+                                    <div class="text-truncate" style="max-width: 250px;" title="@item.Description">
+                                        @item.Description
+                                    </div>
+                                </td>
+                                <td class="text-center">
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <!-- Liên kết sửa sản phẩm sử dụng Area mặc định vì Controller chỉnh sửa có thể chưa di chuyển vào Admin -->
+                                        <a asp-area="" asp-controller="Product" asp-action="Update" asp-route-id="@item.Id" class="btn btn-sm btn-outline-warning d-flex align-items-center gap-1">
+                                            <i class="bi bi-pencil-square"></i> Sửa
+                                        </a>
+                                        <!-- Liên kết xóa sản phẩm -->
+                                        <a asp-area="" asp-controller="Product" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger d-flex align-items-center gap-1">
+                                            <i class="bi bi-trash"></i> Xóa
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="5" class="text-center py-5 text-muted">
+                                <i class="bi bi-inbox fs-1 d-block mb-2 text-secondary"></i>
+                                Chưa có sản phẩm nào trong cửa hàng.
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- Thư viện JS của DataTables hỗ trợ Bootstrap 5 -->
+    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap5.js"></script>
+    <script>
+        $(function () {
+            // Khởi tạo DataTable cho bảng danh sách sản phẩm quản trị
+            $('#productsTable').DataTable({
+                pageLength: 5, // Hiển thị 5 sản phẩm trên mỗi trang
+                order: [[1, 'asc']], // Sắp xếp mặc định theo cột Tên sản phẩm (index 1)
+                language: {
+                    search: 'Tìm kiếm:',
+                    lengthMenu: 'Hiển thị _MENU_ dòng',
+                    info: 'Hiển thị _START_ đến _END_ trong _TOTAL_ sản phẩm',
+                    infoEmpty: 'Không có sản phẩm',
+                    infoFiltered: '(lọc từ _MAX_ sản phẩm)',
+                    zeroRecords: 'Không tìm thấy sản phẩm phù hợp',
+                    emptyTable: 'Chưa có dữ liệu sản phẩm',
+                    paginate: {
+                        first: 'Đầu',
+                        previous: 'Trước',
+                        next: 'Sau',
+                        last: 'Cuối'
+                    }
+                },
+                columnDefs: [
+                    // Không cho phép sắp xếp ở cột Hình ảnh (index 0) và cột Thao tác (index 4)
+                    { orderable: false, targets: [0, 4] }
+                ]
+            });
+        });
+    </script>
+}

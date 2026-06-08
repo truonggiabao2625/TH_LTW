@@ -1,107 +1,70 @@
 @model IEnumerable<TruongGiaBao_0183.Models.Product>
 
 @{
-    ViewData["Title"] = "Quản lý sản phẩm";
-}
-
-@section Styles {
-    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap5.css" />
+    ViewData["Title"] = "Tất cả sản phẩm";
 }
 
 <section class="container page-shell">
     <div class="section-heading d-flex flex-wrap align-items-end justify-content-between gap-3 mb-4">
         <div>
-            <span class="eyebrow">Admin</span>
-            <h1 class="display-title mb-1">Quản lý sản phẩm</h1>
-            <p class="section-subtitle mb-0">Tìm kiếm, phân trang, sắp xếp và thao tác dữ liệu sản phẩm.</p>
+            <span class="eyebrow">Tech Store</span>
+            <h1 class="display-title mb-1">Tất cả sản phẩm</h1>
+            <p class="section-subtitle mb-0">Khám phá bộ sưu tập công nghệ hàng đầu với giá tốt nhất.</p>
         </div>
-        <a asp-action="Add" class="btn btn-success btn-sm">
-            <i class="bi bi-plus-circle"></i> Thêm sản phẩm
-        </a>
     </div>
 
-    <div class="table-shell">
-        <table id="productsTable" class="table table-hover align-middle w-100 mb-0">
-            <thead>
-                <tr>
-                    <th>Mã sản phẩm</th>
-                    <th>Hình ảnh</th>
-                    <th>Tên sản phẩm</th>
-                    <th>Giá</th>
-                    <th>Mô tả</th>
-                    <th>Chức năng</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>@item.Id</td>
-                        <td>
-                            @if (!string.IsNullOrWhiteSpace(item.ImageUrl))
+    <div class="row g-4">
+        @if (Model != null && Model.Any())
+        {
+            foreach (var product in Model)
+            {
+                <div class="col-md-6 col-xl-4">
+                    <div class="product-card h-100 zoom-on-hover">
+                        <div class="product-image-wrap position-relative overflow-hidden">
+                            @if (product.Category != null)
                             {
-                                <img src="@item.ImageUrl" alt="@item.Name" class="table-product-image" />
+                                <span class="badge product-badge badge-category position-absolute">@product.Category.Name</span>
+                            }
+                            @if (!string.IsNullOrWhiteSpace(product.ImageUrl))
+                            {
+                                <img src="@product.ImageUrl" class="card-img-top" alt="@product.Name" />
                             }
                             else
                             {
-                                <span class="badge text-bg-secondary">Chưa có ảnh</span>
+                                <div class="product-image-placeholder rounded">
+                                    <i class="bi bi-image fs-1 text-muted"></i>
+                                </div>
                             }
-                        </td>
-                        <td class="fw-semibold text-body-emphasis">@item.Name</td>
-                        <td class="table-price" data-order="@item.Price">@item.Price.ToString("N0") đ</td>
-                        <td class="product-description-cell">@item.Description</td>
-                        <td>
-                            <div class="btn-group btn-group-sm" role="group" aria-label="Chức năng sản phẩm">
-                                <a asp-action="Display" asp-route-id="@item.Id" class="btn btn-outline-info" title="Xem chi tiết">
-                                    <i class="bi bi-eye"></i>
-                                </a>
-                                <a asp-action="Update" asp-route-id="@item.Id" class="btn btn-outline-primary" title="Sửa">
-                                    <i class="bi bi-pencil-square"></i>
-                                </a>
-                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger" title="Xóa">
-                                    <i class="bi bi-trash"></i>
-                                </a>
+                        </div>
+                        <div class="product-card-body d-flex flex-column">
+                            <h2 class="product-title text-truncate mb-1">@product.Name</h2>
+                            <p class="card-text product-copy flex-grow-1 text-truncate-3 mb-3">@product.Description</p>
+                            <div class="d-flex align-items-center justify-content-between mb-3">
+                                <span class="product-price">@product.Price.ToString("N0") đ</span>
+                                <span class="product-rating"><i class="bi bi-star-fill text-warning me-1"></i>4.8</span>
                             </div>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+                            <div class="d-flex gap-2">
+                                <a asp-area="" asp-controller="Product" asp-action="Display" asp-route-id="@product.Id" class="btn product-action-secondary flex-grow-1">
+                                    <i class="bi bi-eye"></i> Chi tiết
+                                </a>
+                                <button type="button" class="btn product-action-primary flex-grow-1" onclick="addToCart(@product.Id, '@product.Name')">
+                                    <i class="bi bi-cart-plus"></i> Mua ngay
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12">
+                <div class="empty-state">
+                    <i class="bi bi-box-seam"></i>
+                    <h5>Chưa có sản phẩm nào</h5>
+                    <p class="text-muted">Hiện tại chưa có sản phẩm nào trong cửa hàng.</p>
+                </div>
+            </div>
+        }
     </div>
 </section>
-
-@section Scripts {
-    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
-    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap5.js"></script>
-    <script>
-        $(function () {
-            const table = $('#productsTable').DataTable({
-                pageLength: 5,
-                order: [[0, 'asc']],
-                language: {
-                    search: 'Tìm kiếm:',
-                    lengthMenu: 'Hiển thị _MENU_ dòng',
-                    info: 'Hiển thị _START_ đến _END_ trong _TOTAL_ sản phẩm',
-                    infoEmpty: 'Không có sản phẩm',
-                    infoFiltered: '(lọc từ _MAX_ sản phẩm)',
-                    zeroRecords: 'Không tìm thấy sản phẩm phù hợp',
-                    emptyTable: 'Chưa có dữ liệu sản phẩm',
-                    paginate: {
-                        first: 'Đầu',
-                        previous: 'Trước',
-                        next: 'Sau',
-                        last: 'Cuối'
-                    }
-                },
-                columnDefs: [
-                    { orderable: false, targets: [1, 5] }
-                ]
-            });
-
-            const searchValue = new URLSearchParams(window.location.search).get('search');
-            if (searchValue) {
-                table.search(searchValue).draw();
-            }
-        });
-    </script>
-}

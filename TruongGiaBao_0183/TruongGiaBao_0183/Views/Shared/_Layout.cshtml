@@ -1,4 +1,10 @@
 @inject TruongGiaBao_0183.Repositories.ICategoryRepository CategoryRepo
+@{
+    // Lấy thông tin các mặt hàng từ Session
+    var cartItems = Context.Session.GetObjectFromJson<List<CartItem>>("Cart");
+    // Tính tổng số lượng sản phẩm trong giỏ
+    var cartCount = cartItems?.Sum(item => item.Quantity) ?? 0;
+}
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -16,7 +22,7 @@
     <header>
         <nav class="navbar navbar-expand-lg app-navbar">
             <div class="container">
-                <a class="navbar-brand fw-extrabold d-flex align-items-center gap-2" asp-controller="Home" asp-action="Index">
+                <a class="navbar-brand fw-extrabold d-flex align-items-center gap-2" asp-area="" asp-controller="Home" asp-action="Index">
                     <span class="brand-mark"><i class="bi bi-cpu"></i></span>
                     <span>Tech Store</span>
                 </a>
@@ -26,7 +32,7 @@
                 </button>
 
                 <div class="collapse navbar-collapse" id="mainMenu">
-                    <form class="d-flex mx-lg-auto my-3 my-lg-0 site-search" role="search" asp-controller="Product" asp-action="Index" method="get">
+                    <form class="d-flex mx-lg-auto my-3 my-lg-0 site-search" role="search" asp-area="" asp-controller="Product" asp-action="Index" method="get">
                         <div class="input-group search-control">
                             <span class="input-group-text"><i class="bi bi-search"></i></span>
                             <input class="form-control" type="search" name="search" placeholder="Tìm sản phẩm..." aria-label="Tìm sản phẩm" />
@@ -36,15 +42,25 @@
 
                     <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1">
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Home" asp-action="Index">Trang chủ</a>
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Trang chủ</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Product" asp-action="Index">Sản phẩm</a>
+                            <a class="nav-link" asp-area="" asp-controller="Product" asp-action="Index">Sản phẩm</a>
                         </li>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-warning fw-bold" asp-area="Admin" asp-controller="Product" asp-action="Index">
+                                    <i class="bi bi-shield-lock-fill"></i> Quản lý (Admin)
+                                </a>
+                            </li>
+                        }
                         <li class="nav-item">
-                            <a class="nav-link position-relative px-3" href="#">
+                            <!-- Liên kết chuyển hướng đến trang giỏ hàng -->
+                            <a class="nav-link position-relative px-3" asp-area="" asp-controller="Cart" asp-action="Index">
                                 <i class="bi bi-cart fs-5"></i>
-                                <span id="cartBadge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="display: none;">0</span>
+                                <!-- Hiển thị badge số lượng sản phẩm trong giỏ hàng -->
+                                <span id="cartBadge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="@(cartCount == 0 ? "display: none;" : "")">@cartCount</span>
                             </a>
                         </li>
 
@@ -79,14 +95,14 @@
         <div class="container-fluid category-strip">
             <div class="container">
                 <div class="category-tabs py-3">
-                    <a asp-controller="Home" asp-action="Index" asp-route-categoryId="" class="category-link @(string.IsNullOrWhiteSpace(currentCategoryId) ? "active" : "")">
+                    <a asp-area="" asp-controller="Home" asp-action="Index" asp-route-categoryId="" class="category-link @(string.IsNullOrWhiteSpace(currentCategoryId) ? "active" : "")">
                         Tất cả
                     </a>
                     @if (layoutCategories != null && layoutCategories.Any())
                     {
                         foreach (var cat in layoutCategories)
                         {
-                            <a asp-controller="Home" asp-action="Index" asp-route-categoryId="@cat.Id" class="category-link @(currentCategoryId == cat.Id.ToString() ? "active" : "")">
+                            <a asp-area="" asp-controller="Home" asp-action="Index" asp-route-categoryId="@cat.Id" class="category-link @(currentCategoryId == cat.Id.ToString() ? "active" : "")">
                                 <i class="bi @GetCategoryIcon(cat.Name)"></i>
                                 <span>@cat.Name</span>
                             </a>

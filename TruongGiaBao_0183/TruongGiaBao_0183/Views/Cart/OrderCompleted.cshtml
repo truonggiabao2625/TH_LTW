@@ -1,0 +1,44 @@
+@{
+    ViewData["Title"] = "Đặt hàng thành công";
+}
+
+<section class="container page-shell my-5 text-center">
+    <div class="card border-0 shadow-sm rounded-4 py-5 px-4 bg-white border border-light mx-auto" style="max-width: 580px;">
+        <div class="mb-4">
+            <!-- Icon dấu tích thành công lớn nổi bật với vòng tròn xanh lá -->
+            <div class="d-inline-flex bg-success bg-opacity-10 text-success rounded-circle p-4 mb-2 animate-bounce">
+                <i class="bi bi-patch-check-fill" style="font-size: 4.5rem;"></i>
+            </div>
+        </div>
+        
+        <h2 class="fw-bold text-dark mb-2">Đặt hàng thành công!</h2>
+        <p class="text-secondary mb-4 px-3">
+            Cảm ơn bạn đã mua sắm tại <strong>Tech Store</strong>. Đơn hàng của bạn đã được ghi nhận vào hệ thống và đang được xử lý. Chúng tôi sẽ liên hệ để xác nhận trong thời gian sớm nhất.
+        </p>
+
+        <div class="border-top border-light pt-4 mt-2">
+            <h6 class="text-secondary mb-3">Bạn muốn tiếp tục trải nghiệm sản phẩm khác?</h6>
+            <div class="d-flex flex-wrap gap-3 justify-content-center">
+                <!-- Nút quay lại trang danh sách sản phẩm mua sắm -->
+                <a asp-controller="Product" asp-action="Index" class="btn btn-primary px-4 py-2.5 rounded-pill fw-semibold shadow-sm">
+                    Tiếp tục mua sắm
+                </a>
+                <!-- Nút quay lại trang chủ -->
+                <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary px-4 py-2.5 rounded-pill fw-semibold">
+                    Về trang chủ
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    /* Hoạt họa nhỏ cho biểu tượng đặt hàng thành công */
+    .animate-bounce {
+        animation: bounce 1s infinite alternate;
+    }
+    @@keyframes bounce {
+        0% { transform: translateY(0); }
+        100% { transform: translateY(-8px); }
+    }
+</style>

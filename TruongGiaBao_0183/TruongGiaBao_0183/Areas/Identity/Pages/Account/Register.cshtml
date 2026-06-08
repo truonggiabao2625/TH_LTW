@@ -25,6 +25,12 @@
                         <div asp-validation-summary="ModelOnly" class="register-validation" role="alert"></div>
 
                         <div class="mb-3">
+                            <label asp-for="Input.FullName" class="register-label">Họ và tên</label>
+                            <input asp-for="Input.FullName" class="form-control register-control" aria-required="true" placeholder="Nhập họ và tên" />
+                            <span asp-validation-for="Input.FullName" class="register-field-validation"></span>
+                        </div>
+
+                        <div class="mb-3">
                             <label asp-for="Input.Email" class="register-label">Email</label>
                             <input asp-for="Input.Email" class="form-control register-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
                             <span asp-validation-for="Input.Email" class="register-field-validation"></span>

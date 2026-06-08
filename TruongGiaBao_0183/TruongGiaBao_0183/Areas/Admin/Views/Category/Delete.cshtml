@@ -1,0 +1,48 @@
+@model TruongGiaBao_0183.Models.Category
+
+@{
+    ViewData["Title"] = "Xóa Danh mục - Hệ thống Admin";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <!-- Banner cảnh báo đỏ -->
+        <div class="card border-0 shadow-sm rounded-3">
+            <div class="card-header bg-danger text-white py-3">
+                <h5 class="mb-0 fw-bold d-flex align-items-center gap-2">
+                    <i class="bi bi-exclamation-triangle-fill"></i> Xác nhận xóa danh mục
+                </h5>
+            </div>
+            <div class="card-body p-4">
+                <p class="text-secondary mb-4">
+                    Bạn có chắc chắn muốn xóa danh mục sản phẩm này? Hành động này không thể hoàn tác và các sản phẩm thuộc danh mục này có thể bị ảnh hưởng.
+                </p>
+
+                <!-- Chi tiết danh mục -->
+                <div class="bg-light rounded-3 p-3 mb-4 border">
+                    <div class="small text-secondary mb-1">Mã Danh mục:</div>
+                    <div class="fw-bold text-dark mb-3">#@Model.Id</div>
+
+                    <div class="small text-secondary mb-1">Tên Danh mục:</div>
+                    <div class="fw-bold text-dark fs-5">@Model.Name</div>
+                </div>
+
+                <form asp-action="Delete" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" asp-for="Id" />
+
+                    <div class="d-flex gap-2">
+                        <!-- Nút Xóa -->
+                        <button type="submit" class="btn btn-danger px-4 py-2 fw-semibold rounded-3 d-flex align-items-center gap-1">
+                            <i class="bi bi-trash-fill"></i> Đồng ý Xóa
+                        </button>
+                        <!-- Nút Hủy -->
+                        <a asp-action="Index" class="btn btn-outline-secondary px-4 py-2 fw-semibold rounded-3">
+                            Hủy bỏ
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

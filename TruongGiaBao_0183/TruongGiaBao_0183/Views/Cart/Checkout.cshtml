@@ -1,0 +1,139 @@
+@model TruongGiaBao_0183.Models.Order
+@using TruongGiaBao_0183.Extensions
+@using TruongGiaBao_0183.Models
+
+@{
+    ViewData["Title"] = "Thanh toán đơn hàng";
+    // Đọc giỏ hàng từ Session để hiển thị tóm tắt đơn hàng bên cạnh form nhập liệu
+    var cart = Context.Session.GetObjectFromJson<List<CartItem>>("Cart") ?? new List<CartItem>();
+    decimal totalSum = cart.Sum(item => item.Product.Price * item.Quantity);
+}
+
+<section class="container page-shell my-5">
+    <div class="section-heading mb-4">
+        <span class="eyebrow">Đặt hàng</span>
+        <h1 class="display-title mb-1">Thanh toán đơn hàng</h1>
+        <p class="section-subtitle">Vui lòng nhập địa chỉ nhận hàng và thông tin liên hệ để hoàn tất đơn hàng.</p>
+    </div>
+
+    <div class="row g-4">
+        <!-- Cột nhập thông tin khách hàng nhận hàng -->
+        <div class="col-lg-7">
+            <div class="card border-0 shadow-sm rounded-3 p-4 bg-white">
+                <h5 class="fw-bold text-dark mb-4"><i class="bi bi-geo-alt-fill me-2 text-primary"></i>Thông tin nhận hàng</h5>
+                
+                <form asp-action="Checkout" method="post">
+                    @* Thẻ bảo mật chống tấn công giả mạo yêu cầu *@
+                    @Html.AntiForgeryToken()
+                    
+                    @* Hiển thị danh sách tổng hợp lỗi *@
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3 fw-medium"></div>
+
+                    <div class="row g-3">
+                        <!-- Họ khách hàng -->
+                        <div class="col-md-6">
+                            <label asp-for="LastName" class="form-label fw-semibold text-secondary">Họ người nhận</label>
+                            <input asp-for="LastName" class="form-control rounded-3" placeholder="Nhập họ..." />
+                            <span asp-validation-for="LastName" class="text-danger text-xs"></span>
+                        </div>
+
+                        <!-- Tên khách hàng -->
+                        <div class="col-md-6">
+                            <label asp-for="FirstName" class="form-label fw-semibold text-secondary">Tên người nhận</label>
+                            <input asp-for="FirstName" class="form-control rounded-3" placeholder="Nhập tên..." />
+                            <span asp-validation-for="FirstName" class="text-danger text-xs"></span>
+                        </div>
+
+                        <!-- Số điện thoại nhận hàng -->
+                        <div class="col-12">
+                            <label asp-for="PhoneNumber" class="form-label fw-semibold text-secondary">Số điện thoại liên hệ</label>
+                            <input asp-for="PhoneNumber" class="form-control rounded-3" placeholder="Nhập số điện thoại nhận hàng..." />
+                            <span asp-validation-for="PhoneNumber" class="text-danger text-xs"></span>
+                        </div>
+
+                        <!-- Tỉnh / Thành phố -->
+                        <div class="col-md-6">
+                            <label asp-for="City" class="form-label fw-semibold text-secondary">Tỉnh / Thành phố</label>
+                            <input asp-for="City" class="form-control rounded-3" placeholder="Ví dụ: TP. Hồ Chí Minh, Hà Nội..." />
+                            <span asp-validation-for="City" class="text-danger text-xs"></span>
+                        </div>
+
+                        <!-- Địa chỉ cụ thể -->
+                        <div class="col-md-6">
+                            <label asp-for="Address" class="form-label fw-semibold text-secondary">Địa chỉ cụ thể (Số nhà, Đường...)</label>
+                            <input asp-for="Address" class="form-control rounded-3" placeholder="Nhập số nhà, tên đường, phường..." />
+                            <span asp-validation-for="Address" class="text-danger text-xs"></span>
+                        </div>
+
+                        <!-- Ghi chú nhận hàng -->
+                        <div class="col-12">
+                            <label asp-for="Notes" class="form-label fw-semibold text-secondary">Ghi chú giao hàng (Nếu có)</label>
+                            <textarea asp-for="Notes" class="form-control rounded-3" rows="3" placeholder="Ví dụ: Giao ngoài giờ hành chính, gọi trước khi đến..."></textarea>
+                            <span asp-validation-for="Notes" class="text-danger text-xs"></span>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 pt-2">
+                        <button type="submit" class="btn btn-primary w-100 py-3 rounded-3 fw-bold shadow-sm">
+                            <i class="bi bi-bag-check-fill me-2"></i>Xác nhận đặt hàng
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Cột tóm tắt các sản phẩm trong giỏ hàng -->
+        <div class="col-lg-5">
+            <div class="card border-0 shadow-sm rounded-3 p-4 bg-light">
+                <h5 class="fw-bold text-dark mb-4"><i class="bi bi-box-seam-fill me-2 text-primary"></i>Tóm tắt đơn hàng</h5>
+                
+                <div class="order-summary-items mb-4" style="max-height: 280px; overflow-y: auto;">
+                    @if (cart.Any())
+                    {
+                        foreach (var item in cart)
+                        {
+                            <div class="d-flex align-items-center justify-content-between mb-3 border-bottom pb-2">
+                                <div class="d-flex align-items-center gap-3">
+                                    @if (!string.IsNullOrWhiteSpace(item.Product.ImageUrl))
+                                    {
+                                        <img src="@item.Product.ImageUrl" alt="@item.Product.Name" class="rounded" style="width: 50px; height: 50px; object-fit: cover;" />
+                                    }
+                                    else
+                                    {
+                                        <div class="rounded bg-secondary d-flex align-items-center justify-content-center text-white" style="width: 50px; height: 50px;">
+                                            <i class="bi bi-image" style="font-size: 0.8rem;"></i>
+                                        </div>
+                                    }
+                                    <div>
+                                        <h6 class="mb-0 text-dark fw-semibold text-truncate" style="max-width: 200px;">@item.Product.Name</h6>
+                                        <small class="text-secondary">SL: @item.Quantity</small>
+                                    </div>
+                                </div>
+                                <span class="fw-medium text-dark">@((item.Product.Price * item.Quantity).ToString("N0")) đ</span>
+                            </div>
+                        }
+                    }
+                </div>
+
+                <div class="d-flex justify-content-between mb-2 text-secondary">
+                    <span>Tạm tính:</span>
+                    <span class="fw-semibold text-dark">@totalSum.ToString("N0") đ</span>
+                </div>
+                <div class="d-flex justify-content-between mb-2 text-secondary">
+                    <span>Phí vận chuyển:</span>
+                    <span class="text-success fw-semibold">Miễn phí</span>
+                </div>
+                <hr class="my-3" />
+                <div class="d-flex justify-content-between">
+                    <span class="fs-5 fw-bold text-dark">Tổng cộng:</span>
+                    <span class="fs-5 fw-bold text-primary">@totalSum.ToString("N0") đ</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    @* Nhúng thư viện jQuery Validate để hỗ trợ validate trực tiếp client-side *@
+    <partial name="_ValidationScriptsPartial" />
+}

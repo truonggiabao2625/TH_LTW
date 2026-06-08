@@ -1,0 +1,146 @@
+@model IEnumerable<TruongGiaBao_0183.Models.UserRolesViewModel>
+
+@{
+    ViewData["Title"] = "Quản lý Thành viên - Hệ thống Admin";
+}
+
+@section Styles {
+    <!-- CSS của DataTables hỗ trợ Bootstrap 5 -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap5.css" />
+}
+
+<!-- Card bọc ngoài danh sách thành viên -->
+<div class="card border-0 shadow-sm rounded-3">
+    <div class="card-header bg-white border-0 py-3">
+        <h4 class="mb-0 fw-bold text-dark">
+            <i class="bi bi-people-fill text-primary"></i> Quản lý Thành viên
+        </h4>
+    </div>
+    
+    <!-- Hiển thị thông báo thành công hoặc lỗi nếu có -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show mx-4 mt-3 rounded-3" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i> @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show mx-4 mt-3 rounded-3" role="alert">
+            <i class="bi bi-exclamation-octagon-fill me-2"></i> @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="card-body p-4">
+        <div class="table-responsive">
+            <table id="usersTable" class="table table-hover align-middle mb-0">
+                <thead class="table-light text-secondary small text-uppercase">
+                    <tr>
+                        <th class="ps-4">Họ và Tên</th>
+                        <th>Email</th>
+                        <th>Vai trò</th>
+                        <th class="text-center" style="width: 320px;">Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="ps-4 fw-bold text-dark">
+                                    @(string.IsNullOrWhiteSpace(item.FullName) ? "N/A" : item.FullName)
+                                </td>
+                                <td>@item.Email</td>
+                                <td>
+                                    @foreach (var role in item.Roles)
+                                    {
+                                        var badgeClass = role switch
+                                        {
+                                            "Admin" => "bg-danger",
+                                            "Employee" => "bg-warning text-dark",
+                                            "Customer" => "bg-primary",
+                                            "Company" => "bg-info text-dark",
+                                            _ => "bg-secondary"
+                                        };
+                                        <span class="badge @badgeClass text-uppercase fs-xs">@role</span>
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    <div class="d-flex justify-content-center align-items-center gap-2">
+                                        <!-- Form cập nhật vai trò (Role) -->
+                                        <form asp-action="UpdateRole" method="post" class="m-0 d-flex align-items-center gap-1">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="userId" value="@item.Id" />
+                                            <select name="newRole" class="form-select form-select-sm border-secondary-subtle" style="width: 125px; border-radius: 6px; font-weight: 500;">
+                                                @foreach (var role in ViewBag.AllRoles as List<string>)
+                                                {
+                                                    if (item.Roles.Contains(role))
+                                                    {
+                                                        <option value="@role" selected="selected">@role</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="@role">@role</option>
+                                                    }
+                                                }
+                                            </select>
+                                            <button type="submit" class="btn btn-sm btn-success d-flex align-items-center gap-1" title="Lưu vai trò" style="border-radius: 6px; padding: 5px 8px;">
+                                                <i class="bi bi-check-circle"></i>
+                                            </button>
+                                        </form>
+
+                                        <!-- Form xóa thành viên -->
+                                        <form asp-action="Delete" method="post" class="m-0" onsubmit="return confirm('Bạn có chắc chắn muốn xóa thành viên này? Hành động này sẽ xóa vĩnh viễn tài khoản!')">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@item.Id" />
+                                            <button type="submit" class="btn btn-sm btn-outline-danger d-flex align-items-center gap-1" title="Xóa tài khoản" style="border-radius: 6px; padding: 5px 8px;">
+                                                <i class="bi bi-trash"></i> Xóa
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- Thư viện JS của DataTables hỗ trợ Bootstrap 5 -->
+    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap5.js"></script>
+    <script>
+        $(function () {
+            // Khởi tạo DataTable cho bảng thành viên
+            $('#usersTable').DataTable({
+                pageLength: 5, // Hiển thị 5 dòng mỗi trang
+                order: [[0, 'asc']], // Sắp xếp theo Tên bảng chữ cái
+                language: {
+                    search: 'Tìm kiếm:',
+                    lengthMenu: 'Hiển thị _MENU_ dòng',
+                    info: 'Hiển thị _START_ đến _END_ trong _TOTAL_ thành viên',
+                    infoEmpty: 'Không có thành viên',
+                    infoFiltered: '(lọc từ _MAX_ thành viên)',
+                    zeroRecords: 'Không tìm thấy thành viên phù hợp',
+                    emptyTable: 'Chưa có dữ liệu thành viên',
+                    paginate: {
+                        first: 'Đầu',
+                        previous: 'Trước',
+                        next: 'Sau',
+                        last: 'Cuối'
+                    }
+                },
+                columnDefs: [
+                    // Vô hiệu hóa sắp xếp ở cột Thao tác (index 3)
+                    { orderable: false, targets: [3] }
+                ]
+            });
+        });
+    </script>
+}
