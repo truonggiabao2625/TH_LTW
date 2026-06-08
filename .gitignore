@@ -5,3 +5,6 @@
 *.suo
 *.zip
 *.tmp
+.agents/
+.codexrules
+skills-lock.json

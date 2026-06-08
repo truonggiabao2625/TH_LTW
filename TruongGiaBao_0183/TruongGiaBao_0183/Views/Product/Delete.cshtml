@@ -1,12 +1,247 @@
-﻿@model TruongGiaBao_0183.Models.Product
-<h2>Are you sure you want to delete this?</h2>
-<div>
-	<h4>Name: @Model.Name</h4>
-	<h4>Price: @Model.Price</h4>
-	<h4>Description: @Model.Description</h4>
-</div>
-<form asp-action="DeleteConfirmed" method="post">
-	<input type="hidden" asp-for="Id" />
-	<input type="submit" value="Delete" class="btn btn-danger" /> |
-	<a asp-action="Index">Cancel</a>
-</form>
+@model TruongGiaBao_0183.Models.Product
+
+@{
+    ViewData["Title"] = "Xóa sản phẩm";
+}
+
+<section class="delete-product-page">
+    <div class="delete-confirm-card">
+        <div class="danger-icon">
+            <i class="bi bi-exclamation-triangle"></i>
+        </div>
+
+        <div class="delete-heading">
+            <span>Danger Zone</span>
+            <h1>Xóa sản phẩm?</h1>
+            <p>Thao tác này sẽ xóa sản phẩm khỏi danh sách quản lý. Vui lòng kiểm tra đúng sản phẩm trước khi xác nhận.</p>
+        </div>
+
+        <div class="delete-product-summary">
+            <div class="summary-thumbnail">
+                @if (!string.IsNullOrWhiteSpace(Model.ImageUrl))
+                {
+                    <img src="@Model.ImageUrl" alt="@Model.Name" />
+                }
+                else
+                {
+                    <i class="bi bi-image"></i>
+                }
+            </div>
+
+            <div class="summary-content">
+                <span class="summary-label">Sản phẩm sẽ bị xóa</span>
+                <h2>@Model.Name</h2>
+                <div class="summary-meta">
+                    <span>SKU / Id: <strong>#@Model.Id</strong></span>
+                    <span>Giá: <strong>@Model.Price.ToString("N0") đ</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <form asp-action="DeleteConfirmed" method="post" class="delete-actions">
+            <input type="hidden" asp-for="Id" />
+            <a asp-action="Index" class="btn cancel-delete-button">
+                <i class="bi bi-arrow-left"></i> Quay lại / Không xóa
+            </a>
+            <button type="submit" class="btn confirm-delete-button">
+                <i class="bi bi-trash"></i> Xóa sản phẩm
+            </button>
+        </form>
+    </div>
+</section>
+
+<style>
+    .delete-product-page {
+        align-items: center;
+        background: #f8fafc;
+        color: #334155;
+        display: flex;
+        font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        justify-content: center;
+        letter-spacing: -0.02em;
+        min-height: calc(100vh - 180px);
+        padding: 56px 16px;
+    }
+
+    .delete-confirm-card {
+        background: #ffffff;
+        border-radius: 16px;
+        box-shadow: 0 20px 40px rgba(15, 23, 42, 0.05);
+        max-width: 600px;
+        padding: 32px;
+        width: 100%;
+    }
+
+    .danger-icon {
+        align-items: center;
+        background: #fff5f5;
+        border-radius: 16px;
+        color: #ef4444;
+        display: inline-flex;
+        font-size: 1.7rem;
+        height: 56px;
+        justify-content: center;
+        margin-bottom: 22px;
+        width: 56px;
+    }
+
+    .delete-heading span {
+        color: #ef4444;
+        display: inline-block;
+        font-size: 0.74rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        margin-bottom: 8px;
+        text-transform: uppercase;
+    }
+
+    .delete-heading h1 {
+        color: #0f172a;
+        font-size: clamp(1.8rem, 4vw, 2.6rem);
+        font-weight: 700;
+        letter-spacing: -0.045em;
+        line-height: 1.05;
+        margin: 0 0 12px;
+    }
+
+    .delete-heading p {
+        color: #64748b;
+        font-size: 0.96rem;
+        font-weight: 500;
+        line-height: 1.65;
+        margin: 0;
+    }
+
+    .delete-product-summary {
+        align-items: center;
+        background: #fff5f5;
+        border: 1px solid #fee2e2;
+        border-radius: 16px;
+        display: flex;
+        gap: 18px;
+        margin: 28px 0;
+        padding: 18px;
+    }
+
+    .summary-thumbnail {
+        align-items: center;
+        background: #ffffff;
+        border: 1px solid #fee2e2;
+        border-radius: 14px;
+        color: #94a3b8;
+        display: flex;
+        flex: 0 0 92px;
+        height: 92px;
+        justify-content: center;
+        overflow: hidden;
+        padding: 10px;
+    }
+
+    .summary-thumbnail img {
+        max-height: 100%;
+        max-width: 100%;
+        object-fit: contain;
+    }
+
+    .summary-thumbnail i {
+        font-size: 2rem;
+    }
+
+    .summary-content {
+        min-width: 0;
+    }
+
+    .summary-label {
+        color: #ef4444;
+        display: block;
+        font-size: 0.78rem;
+        font-weight: 700;
+        margin-bottom: 4px;
+    }
+
+    .summary-content h2 {
+        color: #0f172a;
+        font-size: 1.25rem;
+        font-weight: 700;
+        letter-spacing: -0.035em;
+        margin: 0 0 8px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .summary-meta {
+        color: #64748b;
+        display: flex;
+        flex-wrap: wrap;
+        font-size: 0.9rem;
+        gap: 10px 16px;
+    }
+
+    .summary-meta strong {
+        color: #0f172a;
+        font-weight: 700;
+    }
+
+    .delete-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        justify-content: flex-end;
+    }
+
+    .confirm-delete-button,
+    .cancel-delete-button {
+        align-items: center;
+        border: none;
+        border-radius: 10px;
+        display: inline-flex;
+        font-size: 0.94rem;
+        font-weight: 600;
+        gap: 8px;
+        justify-content: center;
+        min-height: 48px;
+        padding: 12px 20px;
+    }
+
+    .confirm-delete-button {
+        background: #ef4444;
+        color: #ffffff;
+    }
+
+    .confirm-delete-button:hover {
+        background: #dc2626;
+        color: #ffffff;
+    }
+
+    .cancel-delete-button {
+        background: #0f172a;
+        color: #ffffff;
+        text-decoration: none;
+    }
+
+    .cancel-delete-button:hover {
+        background: #1e293b;
+        color: #ffffff;
+    }
+
+    @@media (max-width: 575.98px) {
+        .delete-confirm-card {
+            padding: 24px;
+        }
+
+        .delete-product-summary {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .delete-actions {
+            flex-direction: column-reverse;
+        }
+
+        .confirm-delete-button,
+        .cancel-delete-button {
+            width: 100%;
+        }
+    }
+</style>

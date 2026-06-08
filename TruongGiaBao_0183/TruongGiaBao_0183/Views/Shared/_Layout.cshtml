@@ -5,28 +5,36 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Tech Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/TruongGiaBao_0183.styles.css" asp-append-version="true" />
     @await RenderSectionAsync("Styles", required: false)
 </head>
-<body class="bg-light">
+<body class="app-body">
     <header>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <nav class="navbar navbar-expand-lg app-navbar">
             <div class="container">
-                <a class="navbar-brand fw-bold" asp-controller="Home" asp-action="Index">Tech Store</a>
+                <a class="navbar-brand fw-extrabold d-flex align-items-center gap-2" asp-controller="Home" asp-action="Index">
+                    <span class="brand-mark"><i class="bi bi-cpu"></i></span>
+                    <span>Tech Store</span>
+                </a>
+
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainMenu" aria-controls="mainMenu" aria-expanded="false" aria-label="Mở menu">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
                 <div class="collapse navbar-collapse" id="mainMenu">
                     <form class="d-flex mx-lg-auto my-3 my-lg-0 site-search" role="search" asp-controller="Product" asp-action="Index" method="get">
-                        <input class="form-control me-2" type="search" name="search" placeholder="Tìm sản phẩm" aria-label="Tìm sản phẩm" />
-                        <button class="btn btn-outline-light" type="submit">Tìm</button>
+                        <div class="input-group search-control">
+                            <span class="input-group-text"><i class="bi bi-search"></i></span>
+                            <input class="form-control" type="search" name="search" placeholder="Tìm sản phẩm..." aria-label="Tìm sản phẩm" />
+                            <button class="btn search-submit" type="submit">Tìm</button>
+                        </div>
                     </form>
 
-                    <ul class="navbar-nav ms-auto">
+                    <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1">
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="Home" asp-action="Index">Trang chủ</a>
                         </li>
@@ -34,45 +42,23 @@
                             <a class="nav-link" asp-controller="Product" asp-action="Index">Sản phẩm</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#footer">Liên hệ</a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link position-relative px-3" href="#">
-                                <i class="bi bi-cart fs-5"></i> Giỏ hàng
-                                <span id="cartBadge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-light" style="display: none; font-size: 0.7rem; margin-top: 5px;">0</span>
+                                <i class="bi bi-cart fs-5"></i>
+                                <span id="cartBadge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="display: none;">0</span>
                             </a>
+                        </li>
+
+                        <li class="nav-item ms-lg-2 ps-lg-2 login-zone">
+                            <partial name="_LoginPartial" />
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
 
-        <div class="container my-3">
-            <div id="bannerCarousel" class="carousel slide" data-bs-ride="carousel">
-                <div class="carousel-inner rounded-4 overflow-hidden">
-                    <div class="carousel-item active">
-                        <img src="https://cdnv2.tgdd.vn/mwg-static/tgdd/Banner/6b/84/6b841e0ebad403f30cd11e446ceee21a.png" class="d-block w-100" alt="Khuyến mãi công nghệ" />
-                    </div>
-                    <div class="carousel-item">
-                        <img src="https://cdnv2.tgdd.vn/mwg-static/tgdd/Banner/fc/60/fc60c2fb73f3b0e0d85c68f322a9e92d.png" class="d-block w-100" alt="Ưu đãi laptop" />
-                    </div>
-                    <div class="carousel-item">
-                        <img src="https://cdnv2.tgdd.vn/mwg-static/tgdd/Banner/db/dc/dbdc2fd9580b2459abbe32c5ef95d383.png" class="d-block w-100" alt="Phụ kiện công nghệ" />
-                    </div>
-                </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#bannerCarousel" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Trước</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#bannerCarousel" data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Sau</span>
-                </button>
-            </div>
-        </div>
-
         @{
             var layoutCategories = await CategoryRepo.GetAllAsync();
+            var currentCategoryId = Context.Request.Query["categoryId"].ToString();
             string GetCategoryIcon(string name)
             {
                 switch (name?.ToLower())
@@ -89,19 +75,21 @@
                 }
             }
         }
-        <div class="container-fluid border-top border-bottom bg-white">
+
+        <div class="container-fluid category-strip">
             <div class="container">
-                <div class="row row-cols-2 row-cols-md-4 row-cols-lg-8 justify-content-center text-center py-3 g-3">
+                <div class="category-tabs py-3">
+                    <a asp-controller="Home" asp-action="Index" asp-route-categoryId="" class="category-link @(string.IsNullOrWhiteSpace(currentCategoryId) ? "active" : "")">
+                        Tất cả
+                    </a>
                     @if (layoutCategories != null && layoutCategories.Any())
                     {
                         foreach (var cat in layoutCategories)
                         {
-                            <div class="col">
-                                <a asp-controller="Home" asp-action="Index" asp-route-categoryId="@cat.Id" class="category-link">
-                                    <i class="bi @GetCategoryIcon(cat.Name) fs-4"></i>
-                                    <span>@cat.Name</span>
-                                </a>
-                            </div>
+                            <a asp-controller="Home" asp-action="Index" asp-route-categoryId="@cat.Id" class="category-link @(currentCategoryId == cat.Id.ToString() ? "active" : "")">
+                                <i class="bi @GetCategoryIcon(cat.Name)"></i>
+                                <span>@cat.Name</span>
+                            </a>
                         }
                     }
                 </div>
@@ -113,18 +101,17 @@
         @RenderBody()
     </main>
 
-    <footer id="footer" class="bg-dark text-white text-center p-4 mt-5">
-        <h5>Tech Store</h5>
-        <p>Website bán đồ công nghệ sử dụng Bootstrap</p>
-        <p class="mb-0">&copy; 2026 All Rights Reserved</p>
+    <footer id="footer" class="app-footer text-center py-4 mt-4">
+        <h5 class="fw-extrabold mb-1">Tech Store</h5>
+        <p class="text-white-50 small mb-2">Website bán đồ công nghệ sử dụng Bootstrap</p>
+        <p class="text-white-50 small mb-0">&copy; 2026 All Rights Reserved</p>
     </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
-    
-    <!-- Toast container for notifications -->
+
     <div id="toastContainer" class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1055;"></div>
 </body>
 </html>

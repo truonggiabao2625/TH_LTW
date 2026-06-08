@@ -1,0 +1,256 @@
+@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Đăng ký tài khoản";
+}
+
+<section class="register-page min-vh-100 d-flex align-items-center justify-content-center">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <div class="register-card mx-auto">
+                    <div class="register-brand">
+                        <div class="register-brand-mark">
+                            <i class="bi bi-person-plus"></i>
+                        </div>
+                        <span>Tech Store</span>
+                    </div>
+
+                    <div class="register-heading">
+                        <h1>@ViewData["Title"]</h1>
+                        <p>Tạo tài khoản để quản lý sản phẩm, lưu thông tin đăng nhập và tiếp tục trải nghiệm mua sắm.</p>
+                    </div>
+
+                    <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="register-form">
+                        <div asp-validation-summary="ModelOnly" class="register-validation" role="alert"></div>
+
+                        <div class="mb-3">
+                            <label asp-for="Input.Email" class="register-label">Email</label>
+                            <input asp-for="Input.Email" class="form-control register-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+                            <span asp-validation-for="Input.Email" class="register-field-validation"></span>
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label asp-for="Input.Password" class="register-label">Mật khẩu</label>
+                                <input asp-for="Input.Password" type="password" class="form-control register-control" autocomplete="new-password" aria-required="true" placeholder="Nhập mật khẩu" />
+                                <span asp-validation-for="Input.Password" class="register-field-validation"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="Input.ConfirmPassword" class="register-label">Xác nhận mật khẩu</label>
+                                <input asp-for="Input.ConfirmPassword" type="password" class="form-control register-control" autocomplete="new-password" aria-required="true" placeholder="Nhập lại mật khẩu" />
+                                <span asp-validation-for="Input.ConfirmPassword" class="register-field-validation"></span>
+                            </div>
+                        </div>
+
+                        <div class="password-helper">
+                            <i class="bi bi-shield-check"></i>
+                            <span>Nên sử dụng mật khẩu có chữ hoa, chữ thường, số và ký tự đặc biệt để tăng độ an toàn.</span>
+                        </div>
+
+                        <button id="registerSubmit" type="submit" class="btn register-submit w-100">
+                            Đăng ký
+                        </button>
+
+                        <p class="register-login-link">
+                            Đã có tài khoản?
+                            <a asp-page="./Login" asp-route-returnUrl="@Model.ReturnUrl">Đăng nhập</a>
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .register-page {
+        background:
+            radial-gradient(circle at 50% 0%, rgba(2, 132, 199, 0.08), transparent 30rem),
+            #f8fafc;
+        color: #334155;
+        font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        letter-spacing: -0.02em;
+        padding: 40px 16px;
+    }
+
+    .register-card {
+        background: #ffffff;
+        border-radius: 16px;
+        box-shadow: 0 20px 40px rgba(15, 23, 42, 0.04);
+        max-width: 480px;
+        padding: 40px;
+        width: 100%;
+    }
+
+    .register-brand {
+        align-items: center;
+        color: #0f172a;
+        display: flex;
+        font-size: 0.95rem;
+        font-weight: 700;
+        gap: 10px;
+        margin-bottom: 32px;
+    }
+
+    .register-brand-mark {
+        align-items: center;
+        background: #e0f2fe;
+        border: 1px solid #bae6fd;
+        border-radius: 12px;
+        color: #0284c7;
+        display: inline-flex;
+        height: 38px;
+        justify-content: center;
+        width: 38px;
+    }
+
+    .register-heading {
+        margin-bottom: 28px;
+    }
+
+    .register-heading h1 {
+        color: #0f172a;
+        font-size: 2rem;
+        font-weight: 700;
+        letter-spacing: -0.045em;
+        line-height: 1.08;
+        margin: 0 0 10px;
+    }
+
+    .register-heading p {
+        color: #64748b;
+        font-size: 0.95rem;
+        font-weight: 500;
+        line-height: 1.65;
+        margin: 0;
+    }
+
+    .register-label {
+        color: #0f172a;
+        display: block;
+        font-size: 0.88rem;
+        font-weight: 600;
+        letter-spacing: -0.02em;
+        margin-bottom: 10px;
+    }
+
+    .register-control {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        color: #0f172a;
+        font-size: 0.95rem;
+        font-weight: 500;
+        letter-spacing: -0.02em;
+        min-height: 50px;
+        padding: 12px 14px;
+        transition: background-color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .register-control::placeholder {
+        color: #94a3b8;
+    }
+
+    .register-control:focus {
+        background: #ffffff;
+        border-color: #0284c7;
+        box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.1);
+        color: #0f172a;
+    }
+
+    .password-helper {
+        align-items: flex-start;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        color: #64748b;
+        display: flex;
+        font-size: 0.82rem;
+        font-weight: 500;
+        gap: 9px;
+        line-height: 1.55;
+        margin: 18px 0 24px;
+        padding: 12px 14px;
+    }
+
+    .password-helper i {
+        color: #0284c7;
+        flex: 0 0 auto;
+        margin-top: 2px;
+    }
+
+    .register-submit {
+        background: #0f172a;
+        border: none;
+        border-radius: 12px;
+        color: #ffffff;
+        font-size: 0.96rem;
+        font-weight: 600;
+        letter-spacing: -0.02em;
+        min-height: 50px;
+        padding: 12px 18px;
+        transition: opacity 0.18s ease, transform 0.18s ease;
+    }
+
+    .register-submit:hover {
+        color: #ffffff;
+        opacity: 0.92;
+        transform: translateY(-1px);
+    }
+
+    .register-login-link {
+        color: #64748b;
+        font-size: 0.92rem;
+        font-weight: 500;
+        margin: 24px 0 0;
+        text-align: center;
+    }
+
+    .register-login-link a {
+        color: #0284c7;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .register-login-link a:hover {
+        color: #0369a1;
+    }
+
+    .register-validation {
+        background: #fff5f5;
+        border: 1px solid #fee2e2;
+        border-radius: 12px;
+        color: #dc2626;
+        font-size: 0.88rem;
+        margin-bottom: 18px;
+        padding: 12px 14px;
+    }
+
+    .register-validation:empty {
+        display: none;
+    }
+
+    .register-field-validation {
+        color: #dc2626;
+        display: block;
+        font-size: 0.82rem;
+        font-weight: 500;
+        margin-top: 7px;
+    }
+
+    .register-field-validation:empty {
+        display: none;
+    }
+
+    @@media (max-width: 575.98px) {
+        .register-card {
+            padding: 30px 24px;
+        }
+    }
+</style>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

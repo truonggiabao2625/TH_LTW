@@ -1,0 +1,269 @@
+@page
+@model LoginModel
+
+@{
+    ViewData["Title"] = "Đăng nhập";
+}
+
+<section class="login-page min-vh-100 d-flex align-items-center justify-content-center">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <div class="login-card mx-auto">
+                    <div class="login-brand">
+                        <div class="login-brand-mark">
+                            <i class="bi bi-shield-lock"></i>
+                        </div>
+                        <span>Tech Store</span>
+                    </div>
+
+                    <div class="login-heading">
+                        <h1>@ViewData["Title"]</h1>
+                        <p>Truy cập tài khoản để quản lý sản phẩm và tiếp tục phiên làm việc an toàn.</p>
+                    </div>
+
+                    <form id="account" method="post" class="login-form">
+                        <div asp-validation-summary="ModelOnly" class="login-validation" role="alert"></div>
+
+                        <div class="mb-3">
+                            <label asp-for="Input.Email" class="login-label">Email</label>
+                            <input asp-for="Input.Email" class="form-control login-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+                            <span asp-validation-for="Input.Email" class="login-field-validation"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Input.Password" class="login-label">Mật khẩu</label>
+                            <input asp-for="Input.Password" type="password" class="form-control login-control" autocomplete="current-password" aria-required="true" placeholder="Nhập mật khẩu" />
+                            <span asp-validation-for="Input.Password" class="login-field-validation"></span>
+                        </div>
+
+                        <div class="login-options">
+                            <label asp-for="Input.RememberMe" class="login-check">
+                                <input class="form-check-input" asp-for="Input.RememberMe" />
+                                <span>Ghi nhớ đăng nhập</span>
+                            </label>
+                            <a id="forgot-password" asp-page="./ForgotPassword">Quên mật khẩu?</a>
+                        </div>
+
+                        <button id="login-submit" type="submit" class="btn login-submit w-100">
+                            Đăng nhập
+                        </button>
+
+                        <p class="login-register">
+                            Chưa có tài khoản?
+                            <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Đăng ký ngay</a>
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .login-page {
+        background:
+            radial-gradient(circle at 50% 0%, rgba(2, 132, 199, 0.08), transparent 28rem),
+            #f8fafc;
+        color: #334155;
+        font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        letter-spacing: -0.02em;
+        padding: 40px 16px;
+    }
+
+    .login-card {
+        background: #ffffff;
+        border-radius: 16px;
+        box-shadow: 0 20px 40px rgba(15, 23, 42, 0.04);
+        max-width: 440px;
+        padding: 40px;
+        width: 100%;
+    }
+
+    .login-brand {
+        align-items: center;
+        color: #0f172a;
+        display: flex;
+        font-size: 0.95rem;
+        font-weight: 700;
+        gap: 10px;
+        margin-bottom: 34px;
+    }
+
+    .login-brand-mark {
+        align-items: center;
+        background: #e0f2fe;
+        border: 1px solid #bae6fd;
+        border-radius: 12px;
+        color: #0284c7;
+        display: inline-flex;
+        height: 38px;
+        justify-content: center;
+        width: 38px;
+    }
+
+    .login-heading {
+        margin-bottom: 28px;
+    }
+
+    .login-heading h1 {
+        color: #0f172a;
+        font-size: 2rem;
+        font-weight: 700;
+        letter-spacing: -0.045em;
+        line-height: 1.08;
+        margin: 0 0 10px;
+    }
+
+    .login-heading p {
+        color: #64748b;
+        font-size: 0.95rem;
+        font-weight: 500;
+        line-height: 1.65;
+        margin: 0;
+    }
+
+    .login-label {
+        color: #0f172a;
+        display: block;
+        font-size: 0.88rem;
+        font-weight: 600;
+        letter-spacing: -0.02em;
+        margin-bottom: 10px;
+    }
+
+    .login-control {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        color: #0f172a;
+        font-size: 0.95rem;
+        font-weight: 500;
+        letter-spacing: -0.02em;
+        min-height: 50px;
+        padding: 12px 14px;
+        transition: background-color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .login-control::placeholder {
+        color: #94a3b8;
+    }
+
+    .login-control:focus {
+        background: #ffffff;
+        border-color: #0284c7;
+        box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.1);
+        color: #0f172a;
+    }
+
+    .login-options {
+        align-items: center;
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        margin: 18px 0 24px;
+    }
+
+    .login-check {
+        align-items: center;
+        color: #475569;
+        display: inline-flex;
+        font-size: 0.9rem;
+        font-weight: 500;
+        gap: 9px;
+        margin: 0;
+    }
+
+    .login-check .form-check-input {
+        border-color: #cbd5e1;
+        box-shadow: none;
+        height: 1rem;
+        margin: 0;
+        width: 1rem;
+    }
+
+    .login-check .form-check-input:checked {
+        background-color: #0284c7;
+        border-color: #0284c7;
+    }
+
+    .login-options a,
+    .login-register a {
+        color: #0284c7;
+        font-size: 0.9rem;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .login-options a:hover,
+    .login-register a:hover {
+        color: #0369a1;
+    }
+
+    .login-submit {
+        background: #0f172a;
+        border: none;
+        border-radius: 12px;
+        color: #ffffff;
+        font-size: 0.96rem;
+        font-weight: 600;
+        letter-spacing: -0.02em;
+        min-height: 50px;
+        padding: 12px 18px;
+    }
+
+    .login-submit:hover {
+        background: #1e293b;
+        color: #ffffff;
+    }
+
+    .login-register {
+        color: #64748b;
+        font-size: 0.92rem;
+        font-weight: 500;
+        margin: 24px 0 0;
+        text-align: center;
+    }
+
+    .login-validation {
+        background: #fff5f5;
+        border: 1px solid #fee2e2;
+        border-radius: 12px;
+        color: #dc2626;
+        font-size: 0.88rem;
+        margin-bottom: 18px;
+        padding: 12px 14px;
+    }
+
+    .login-validation:empty {
+        display: none;
+    }
+
+    .login-field-validation {
+        color: #dc2626;
+        display: block;
+        font-size: 0.82rem;
+        font-weight: 500;
+        margin-top: 7px;
+    }
+
+    .login-field-validation:empty {
+        display: none;
+    }
+
+    @@media (max-width: 575.98px) {
+        .login-card {
+            padding: 30px 24px;
+        }
+
+        .login-options {
+            align-items: flex-start;
+            flex-direction: column;
+            gap: 10px;
+        }
+    }
+</style>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
